@@ -1,0 +1,40 @@
+/* make row numbers create width/height so it's a responsive grid that fits within a predefined board area */
+
+h1 {
+    margin: 20px 0;
+    text-align: center;
+    font-family: arial;
+    font-size: 4em;
+    font-weight: 400;
+}
+
+button {
+    display: block;
+    margin: 20px auto;
+    font-size: 2em;
+    padding: .25em .5em;
+    background-color: yellow;
+    border-radius: 6px;
+}
+
+.wrap-board {
+    width: 500px;
+    margin: 20px auto;
+}
+
+.board-box {
+    position: relative;
+    display: inline-block;
+    margin: 2px;
+    border: 1px solid black;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.x {
+    background-color: orange;
+}
+
+.o {
+    background-color: green;
+}
