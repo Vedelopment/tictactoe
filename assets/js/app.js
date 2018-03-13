@@ -129,6 +129,7 @@ function makePlay() {
         boxRender.innerHTML = symbol;
         boxRender.classList.add(symbol);
         displayBoard();
+        // allow browser to update html between prompts and alerts
         setTimeout(function() {
             checkForWin();
         }, 1000);
@@ -180,7 +181,7 @@ function checkForWin() {
             colBox ++ ;
         }
 
-        // left to right
+        // check for left to right diagonal win
         rowIndexLR = 0;
         colBoxLR = 0;
         var diagArrLR = [];
@@ -195,7 +196,7 @@ function checkForWin() {
             return;
         }
 
-        // right to left
+        // check for right to left diagonal win
         rowIndexRL = 0;
         colBoxRL = boardRows - 1;
         var diagArrRL = [];
@@ -210,7 +211,7 @@ function checkForWin() {
             return;
         }
 
-        // tied game
+        // check for tied game
         if (totalPlays === totalBoxes) {
             console.log('The game is a tie!');
             return;
