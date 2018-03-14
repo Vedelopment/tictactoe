@@ -121,7 +121,7 @@ function makePlay() {
     symbol = currPlayer.symbol;
     boxPlay = 0;
 
-    if (currPlayer.name != 'Computer') {
+    if (currPlayer.name != 'Computer' && currPlayer.name != 'auto') {
         boxPlay = prompt(currPlayer.name + ': Type in the box number you would like to mark with your play.')
     } else {
         boxPlay = Math.ceil(Math.random() * Math.floor(totalBoxes));
@@ -131,7 +131,7 @@ function makePlay() {
     key1 = gridKey[boxPlay][1];
 
     if (gameboard[key0][key1] != '') {
-        if (currPlayer.name != 'Computer') {
+        if (currPlayer.name != 'Computer' && currPlayer.name != 'auto') {
             alert('Oops! This one is taken. Please pick a box that has not already been played.');
         }
         makePlay(currPlayer);
