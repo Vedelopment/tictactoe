@@ -1,6 +1,9 @@
 'use sctrict'
 
-alert('Welcome to Tic Tac Toe! This code was written by LD Dean. You can play any size grid in this game (3x3 is the classic, but try 10x10!) as the user against the computer and choose either "x" or "o". Click the button "Play a round!" to start a new game. If using the console, "enter playRound();" to start a new game. Have fun!')
+alert('Welcome to Tic Tac Toe! This code was written by LD Dean. You can play any size grid in this game (3x3 is the classic, but try 10x10!) as the user against the computer and choose either "x" or "o". Click the button "Play a round!" to start a new game. Have fun!')
+
+alert('Note: If playing in the console only, enter "playRound();" to start a new game. Each square is numbered from left to right, top to bottom. Example, in a 3x3 board the top left box is #1, the bottom right is #9.')
+
 var boardRows = prompt('Please enter how many rows you want to play.'),
     totalBoxes = boardRows * boardRows,
     currPlayer,
@@ -42,7 +45,9 @@ Board.prototype.createBoard = function() {
     var createRow;
     var createBox;
     var gridKeyIndexCount = 1;
-    boardRender.innerHTML = ''; // clear board for new game
+    if (boardRender) {
+        boardRender.innerHTML = ''; // clear board for new game
+    }
     for(createRow = 0; createRow < this.boardRows; createRow++){
         this.grid[createRow] = [];
         for(createBox = 0; createBox < this.boardRows; createBox++){
@@ -61,7 +66,9 @@ Board.prototype.createBoard = function() {
             node.setAttribute('id', text);
             node.setAttribute('class', 'board-box');
             node.setAttribute('style', style);
-            document.getElementById('board').appendChild(node);
+            if (boardRender) {
+                boardRender.appendChild(node);
+            }
 
             gridKeyIndexCount ++ ;
         }
@@ -86,7 +93,9 @@ function playRound() {
     currPlayer = player[0];
     game.createBoard();
     displayBoard();
-    makePlay();
+    setTimeout(function() { // allow browser to update html between prompts and alerts
+        makePlay();
+    }, 50);
 }
 
 function nextPlayer() {
@@ -126,13 +135,14 @@ function makePlay() {
     } else {
         gameboard[key0][key1] = symbol;
         boxRender = document.getElementById(boxPlay);
-        boxRender.innerHTML = symbol;
-        boxRender.classList.add(symbol);
+        if (boardRender) {
+            boxRender.innerHTML = symbol;
+            boxRender.classList.add(symbol);
+        }
         displayBoard();
-        // allow browser to update html between prompts and alerts
-        setTimeout(function() {
+        setTimeout(function() { // allow browser to update html between prompts and alerts
             checkForWin();
-        }, 1000);
+        }, 500);
     }
 }
 
@@ -191,8 +201,8 @@ function checkForWin() {
             colBoxLR ++ ;
         }
         if (diagArrLR.every(allEqual)) {
-            console.log(currPlayer.name, 'made a ' + 'diagonal L to R win!');
-            alert(currPlayer.name + ' made a ' + 'diagonal L to R win!');
+            console.log(currPlayer.name, 'made a ' + 'diagonal left to right win!');
+            alert(currPlayer.name + ' made a ' + 'diagonal left to right win!');
             return;
         }
 
@@ -206,14 +216,15 @@ function checkForWin() {
             colBoxRL --;
         }
         if (diagArrRL.every(allEqual)) {
-            console.log(currPlayer.name, 'made a ' + 'diagonal R to L win!');
-            alert(currPlayer.name + ' made a ' + 'diagonal R to L win!');
+            console.log(currPlayer.name, 'made a ' + 'diagonal right to left win!');
+            alert(currPlayer.name + ' made a ' + 'diagonal right to left win!');
             return;
         }
 
         // check for tied game
         if (totalPlays === totalBoxes) {
             console.log('The game is a tie!');
+            alert('The game is a tie!');
             return;
         }
 
