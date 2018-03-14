@@ -1,5 +1,8 @@
 # Tic Tac Toe
 
+Play online:
+[Tic Tac Toe, version 1](http://tictactoe-ld-dean.bitballoon.com/ "Tic Tac Toe by LD Dean")
+
 An object-oriented javascript tic tac toe game that supports potentially unlimited grid sizes and has some functionality to support more than two players in the future. Future plans also include making the computer a smarter player.
 
 To test wins, a 2x2 board is fastest. To test ties, a 4x4 board is easier to "not win". To test your patience, I recommend a board of 6x6 or higher.
