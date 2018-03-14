@@ -48,6 +48,9 @@ Board.prototype.createBoard = function() {
     if (boardRender) {
         boardRender.innerHTML = ''; // clear board for new game
     }
+    if (boardRows > 5 && boardRender) {
+        document.getElementById('title').innerHTML = 'Tic Tac Nope';
+    }
     for(createRow = 0; createRow < this.boardRows; createRow++){
         this.grid[createRow] = [];
         for(createBox = 0; createBox < this.boardRows; createBox++){
