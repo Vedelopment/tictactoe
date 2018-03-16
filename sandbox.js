@@ -2,6 +2,71 @@
 // check for rows/cols that don't have opponent value in them, make that move next, pick random value from that row?
 // if none are available, check for ones that have player value, make move there
 
+// template for strategy function with switch option
+function one() {
+    console.log('function one was called');
+    return false;
+}
+function two() {
+    console.log('function two was called');
+    return true;
+}
+function three() {
+    console.log('function three was called');
+    return true;
+}
+
+var isTrue = true;
+switch (isTrue) {
+case one():
+    console.log('one is true');
+    break;
+case two():
+    console.log('two is true');
+    break;
+case three():
+    console.log('three is true');
+    break;
+default:
+    console.log('nothing is real');
+}
+// (function checkTrue() {
+//     if (one()) {
+//         console.log('one is true');
+//     } else if (two()) {
+//         console.log('two is true');
+//     }
+// })();
+
+// template for strategy switch functions
+var isTrue = true, x = false, y = false;
+
+(function runScenarios() {
+    for(count = 0; count < 1; count++) {
+        if (true) {
+            x = true;
+            console.log({x});
+            break;
+        }
+    }
+    for(count = 0; count < 1; count++) {
+        if (true) {
+            y = true;
+            console.log({y});
+            break;
+        }
+    }})();
+switch (isTrue) {
+case x:
+    console.log('x is true');
+    // break;
+case y:
+    console.log('y is true');
+    // break;
+default:
+    console.log('nothing is real');
+}
+
 // check for wins------------------------------------------------
 
 // not enough plays to check for win yet ------------------------------------------------
