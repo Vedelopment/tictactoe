@@ -12,9 +12,13 @@ var boardRows = prompt('Please enter how many rows you want to play.'),
     userSymbol = prompt('Do you want x\'s or o\'s? Enter only lowercase "x" or lowercase "o".'),
     comp = 'Computer',
     compSymbol,
-    boxPlay = '';
+    boxPlay = '',
+    smartPlay,
     boardRender = document.getElementById('board'),
     gridKey = [], // array used to associate box numbers with game array indices
+    key0,
+    key1,
+    selection = null,
     totalPlays = 0;
 
 if (userSymbol === 'x') {
@@ -45,6 +49,7 @@ Board.prototype.createBoard = function() {
     var createRow;
     var createBox;
     var gridKeyIndexCount = 1;
+    var boxDisplay = 1;
     if (boardRender) {
         boardRender.innerHTML = ''; // clear board for new game
     }
@@ -57,7 +62,8 @@ Board.prototype.createBoard = function() {
 
             var boxWidth = 500/boardRows -6;
             var boxHeight = 500/boardRows -6;
-            var text = gridKeyIndexCount
+            var text = boxDisplay;
+            var boxId = '' + createRow + createBox;
             var node = document.createElement('div');
             var textnode = document.createTextNode(text);
             var style = 'width: ' + boxWidth + 'px; height: ' + boxWidth + 'px; font-size: ' + 7/boardRows + 'em; line-height: ' + boxWidth + 'px';
@@ -66,18 +72,24 @@ Board.prototype.createBoard = function() {
             gridKey[gridKeyIndexCount] = [createRow, createBox];
 
             node.appendChild(textnode);
-            node.setAttribute('id', text);
+            node.setAttribute('id', boxId);
             node.setAttribute('class', 'board-box');
             node.setAttribute('style', style);
+
             if (boardRender) {
                 boardRender.appendChild(node);
-            }
+            };
+
+            if (createBox < (boardRows - 1)) {
+                boxDisplay ++ ;
+            };
 
             gridKeyIndexCount ++ ;
         }
+        boxDisplay ++ ;
     }
+    boxCollection = document.getElementsByClassName("board-box");
 }
-
 
 var game = new Board();
 var gameboard = game.grid;
@@ -96,9 +108,7 @@ function playRound() {
     currPlayer = player[0];
     game.createBoard();
     displayBoard();
-    setTimeout(function() { // allow browser to update html between prompts and alerts
-        makePlay();
-    }, 50);
+    makePlay();
 }
 
 function nextPlayer() {
@@ -112,45 +122,121 @@ function nextPlayer() {
     makePlay();
 }
 
+// check for row with all opponent symbols and one open square to block opponent win
+// function noOpponent (el, array, index) {
+//     return el === '' || el != symbol;
+// }
+
+function blockWin() {
+    rowArr.forEach(function(el) {
+        arrCompare = [];
+        arrCompKey = [];
+        if (el === '') {
+            arrCompKey.push(gameboard.indexOf(rowArr));
+            arrCompKey.push(rowArr.prototype.indexOf(el));
+            arrCompare.push(arrCompKey);
+        }
+    })
+    if (arrCompare.length === 1 && arrCompare.every(onlyOpponent)) {
+        key0 = count;
+        key1 = Math.floor(Math.random() * boardRows);
+        smartPlay = gameboard[key0][key1];
+    }
+}
+
+// check for row with player symbol and no opponent symbols
+function noOpponent (el, array, index) {
+    return el === '' || el === symbol;
+}
+
+function smartMove() {
+    // smartPlay = null;
+    // for(count = 0; count < boardRows; count++) {
+    //     rowArr = gameboard[count];
+    //     // if (rowArr.every(blockWin)) {
+    //     //     console.log('blockWin__________________IF');
+    //     //     key0 = count;
+    //     //     key1 = Math.floor(Math.random() * boardRows);
+    //     //     console.log('IF KEYS:', {key0, key1});
+    //     //     break;
+    //     }
+    // }
+    for(count = 0; count < boardRows; count++) {
+        rowArr = gameboard[count];
+        if (rowArr.every(noOpponent)) {
+            console.log('noOpponent__________________IF');
+            key0 = count;
+            key1 = Math.floor(Math.random() * boardRows);
+            console.log('IF KEYS:', {key0, key1});
+            break;
+        }
+    }
+    if (smartPlay === null) {
+        console.log('noOpponent__________________ELSE');
+        key0 = Math.floor(Math.random() * boardRows);
+        key1 = Math.floor(Math.random() * boardRows);
+        console.log({key0, key1});
+    }
+    console.log('outside loop keys: ', {key0, key1});
+    smartPlay = gameboard[key0][key1];
+    isValid();
+}
+
 function makePlay() {
     console.log(currPlayer.name, ', make your play!');
-
-    var selection = null;
-    var key0;
-    var key1;
+    selection = null;
     symbol = currPlayer.symbol;
     boxPlay = 0;
 
     if (currPlayer.name != 'Computer' && currPlayer.name != 'auto') {
-        boxPlay = prompt(currPlayer.name + ': Type in the box number you would like to mark with your play.')
-    } else {
-        boxPlay = Math.ceil(Math.random() * Math.floor(totalBoxes));
-    }
-
-    key0 = gridKey[boxPlay][0];
-    key1 = gridKey[boxPlay][1];
-
-    if (gameboard[key0][key1] != '') {
-        if (currPlayer.name != 'Computer' && currPlayer.name != 'auto') {
-            alert('Oops! This one is taken. Please pick a box that has not already been played.');
+        boxPlay = prompt(currPlayer.name + ': Type in the box number you would like to mark with your play.');
+        boxPlay = Math.floor(boxPlay);
+        if (boxPlay > totalBoxes || boxPlay < 0 || isNaN(boxPlay)) {
+            alert('please pick a valid box number');
+            makePlay();
+        } else {
+            key0 = gridKey[boxPlay][0];
+            key1 = gridKey[boxPlay][1];
+            isValid();
         }
-        makePlay(currPlayer);
     } else {
-        gameboard[key0][key1] = symbol;
-        boxRender = document.getElementById(boxPlay);
-        if (boardRender) {
-            boxRender.innerHTML = symbol;
-            boxRender.classList.add(symbol);
-        }
-        displayBoard();
-        setTimeout(function() { // allow browser to update html between prompts and alerts
-            checkForWin();
-        }, 500);
+        smartMove();
     }
 }
 
-function allEqual(element, index, array) {
-	return element === array[0] && element != '';
+function isValid() {
+    if (currPlayer.name === 'Computer' || currPlayer.name === 'auto') {
+        if (smartPlay != '') {
+            smartMove();
+        } else {
+            markBox();
+        }
+    }
+    else if (gameboard[key0][key1] != '') {
+        if (currPlayer.name != 'Computer' && currPlayer.name != 'auto') {
+            alert('Oops! This one is taken. Please pick a box that has not already been played.');
+        }
+        makePlay();
+    } else {
+        markBox();
+    }
+}
+
+function markBox() {
+    gameboard[key0][key1] = symbol;
+    boxRender = document.getElementById('' + key0 + key1);
+    if (boardRender) {
+        boxRender.innerHTML = symbol;
+        boxRender.classList.add(symbol);
+    }
+    displayBoard();
+    setTimeout(function() { // allow browser to update html between prompts and alerts
+        checkForWin();
+    }, 1000);
+}
+
+function allEqual(el, index, array) {
+	return el === array[0] && el != '';
 }
 
 function checkForWin() {
