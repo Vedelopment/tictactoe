@@ -157,6 +157,7 @@ function displayBoard() {
     gameViewPrompt = '';
     let boxCount = 1;
     gameboard.forEach(function(row) {
+        console.log(row);
         for(rowCount = 0; rowCount < boardRows; rowCount ++) {
             if(row[rowCount] === '') {
                 gameViewPrompt += boxCount;
@@ -181,7 +182,7 @@ function playRound() {
 }
 
 function makePlay() {
-    console.log(currPlayer.name, ', make your play!');
+    console.log(currPlayer.name + ', make your play!');
     symbol = currPlayer.symbol;
 
     if (currPlayer.name != 'Computer' && currPlayer.name != 'auto') {
