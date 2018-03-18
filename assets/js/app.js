@@ -1,4 +1,4 @@
-'use sctrict'
+'use strict'
 
 alert('Welcome to Tic Tac Toe! This code was written by LD Dean. You can play any size grid in this game (3x3 is the classic, but try 10x10!) as the user against the computer and choose either "x" or "o". Click the button "Play a round!" to start a new game. Have fun!')
 
@@ -6,8 +6,18 @@ alert('Note: If playing in the console only, enter "playRound();" to start a new
 
 var boardRows = prompt('Please enter how many rows you want to play.'),
     totalBoxes = boardRows * boardRows,
+    boxCollection,
+    boxRender,
+    colBoxLR,
+    colBoxRL,
+    count,
+    countBox,
+    countDiagLR,
+    countDiagRL,
     gameView,
+    gameViewPrompt,
     currPlayer,
+    currPlayerIndex,
     symbol = '',
     user = prompt('Please enter your name.'),
     userSymbol = prompt('Do you want x\'s or o\'s? Enter only lowercase "x" or lowercase "o".'),
@@ -15,6 +25,13 @@ var boardRows = prompt('Please enter how many rows you want to play.'),
     compSymbol,
     boxPlay = '',
     smartPlay,
+    rowCount,
+    rowArr,
+    rowIndex,
+    rowIndexLR,
+    rowIndexRL,
+    arrCompare,
+    arrCompKey,
     boardRender = document.getElementById('board'),
     gridKey = [], // array used to associate box numbers with game array indices
     key0,
@@ -178,7 +195,7 @@ function playRound() {
     displayBoard();
     setTimeout(function() {
         makePlay();
-    }, 500);
+    }, 200);
 }
 
 function makePlay() {
@@ -260,7 +277,7 @@ function markBox() {
     displayBoard();
     setTimeout(function() { // allow browser to update html between prompts and alerts
         checkForWin();
-    }, 800);
+    }, 400);
 }
 
 function allEqual(el, index, array) {
