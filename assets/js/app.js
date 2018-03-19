@@ -80,7 +80,6 @@ Board.prototype.createBoard = function() {
 
     for(createRow = 0; createRow < this.boardRows; createRow++){
         this.grid[createRow] = [];
-
         for(createBox = 0; createBox < this.boardRows; createBox++){
 
             var boxWidth = 500/boardRows -6,
