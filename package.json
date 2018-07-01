@@ -1,0 +1,24 @@
+{
+  "name": "eslintinit",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-google": "^0.9.1"
+  },
+  "description": "An object-oriented javascript tic tac toe game that supports potentially unlimited grid sizes and has some functionality to support more than two players in the future.",
+  "version": "1.0.0",
+  "main": "assets/js/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vedelopment/tictactoe.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Vedelopment/tictactoe/issues"
+  },
+  "homepage": "https://github.com/Vedelopment/tictactoe#readme"
+}

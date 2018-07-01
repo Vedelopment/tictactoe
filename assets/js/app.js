@@ -1,9 +1,20 @@
-'use strict'
+/* Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.  */
+
+// gameboard is now one large array containg box objects
+// added array for win comparing
+// added winKey array to remove boxes as they are played
+    // computer will no longer pick invalid boxes in default case of choosing a random one
+// all win logic with new array structures is working again
+// TODO:
+    // update smartMove logic to reflect new array structures
+    // test all know win cases
+    // test that computer playing auto works as expected (at this point it will always be a tie as computer will block itself from winning a row and always tries to make plays on a row it could win on)
+
+'use strict';
 
 // alert('Welcome to Tic Tac Toe! This code was written by LD Dean. You can play any size grid in this game (3x3 is the classic, but try 10x10!) as the user against the computer and choose either "x" or "o". Click the button "Play a round!" to start a new game. Have fun!')
 //
 // alert('Note: If playing in the console only, enter "playRound();" to start a new game. Each square is numbered from left to right, top to bottom. Example, in a 3x3 board the top left box is #1, the bottom right is #9.')
-
 // board object refactor
 // var boardRows = prompt('Please enter how many rows you want to play.'),
 
@@ -31,7 +42,6 @@ var boardRows = 3,
     comp = 'Computer',
     compSymbol,
     boxPlay = '',
-    smartPlay,
     rowCount,
     rowArr,
     rowIndex,
@@ -44,8 +54,8 @@ var boardRows = 3,
     openBoxes = [], // array computer can pick random valid boxes from
     key0,
     key1,
-    blockWinStatus,
-    noOpponentStatus,
+    // blockWinStatus,
+    // noOpponentStatus,
     bestPlay = true,
     totalPlays = 0;
 
@@ -66,7 +76,7 @@ function PlayerList() {
 
 PlayerList.prototype.createPlayers = function(name, symbol) {
     this.playersList.push(new Player(name, symbol));
-}
+};
 
 function Box(num, symbol) {
     this.num = num;
@@ -91,16 +101,18 @@ Board.prototype.createBoard = function(num, symbol) {
         document.getElementById('title').innerHTML = 'Tic Tac Nope'; // change game title for large boards
     }
 
-    for(createBox = 0; createBox < totalBoxes; createBox++){ // create boxes equal to totalBoxes
-
+    for (createBox = 0; createBox < totalBoxes; createBox++) { // create boxes equal to totalBoxes
         // DOM
         var boxWidth = 500/boardRows -6,
-            boxHeight = 500/boardRows -6,
+            // boxHeight = 500/boardRows -6,
             text = boxDisplay,
             boxId = '' + boxDisplay,
             node = document.createElement('div'),
             textnode = document.createTextNode(text),
-            style = 'width: ' + boxWidth + 'px; height: ' + boxWidth + 'px; font-size: ' + 7/boardRows + 'em; line-height: ' + boxWidth + 'px';
+            style = 'width: ' + boxWidth + 'px;'
+                    + 'height: ' + boxWidth + 'px;'
+                    + 'font-size: '+ 7/boardRows + 'em;'
+                    + 'line-height: ' + boxWidth + 'px';
 
         node.appendChild(textnode);
         node.setAttribute('id', boxId);
@@ -109,15 +121,15 @@ Board.prototype.createBoard = function(num, symbol) {
 
         if (boardRender) {
             boardRender.appendChild(node);
-        };
+        }
 
         // GAMEBOARD ARRAY
         gameboard.push(new Box(boxDisplay, '')); // create new box and push into board object
         openBoxes.push(createBox + 1);
-        boxDisplay ++ ;
+        boxDisplay ++;
     }
-    console.log({openBoxes});
-}
+    console.log(openBoxes);
+};
 
 var game = new Board();
 var gameboard = game.grid;
@@ -128,11 +140,11 @@ game.createBoard();
 players.createPlayers(user, userSymbol);
 players.createPlayers(comp, compSymbol);
 
-////////////////////////////// COMPARE/STRATEGY FUNCTIONS //////////////////////////////
-function onlyOpponent (el, array, index) { // check if only opponent symbols are in row, assumes only two players
+// //////////////////////////// COMPARE/STRATEGY FUNCTIONS //////////////////////////////
+function onlyOpponent(el) { // check if only opponent symbols are in row, assumes only two players
     return el != symbol;
 }
-function noOpponentCheck (el, array, index) { // check for row with player symbol and no opponent symbols
+function noOpponentCheck(el) { // check for row with player symbol and no opponent symbols
     return el === '' || el === symbol;
 }
 
@@ -145,7 +157,7 @@ function blockWinCheck(rowArr) {
                 arrCompKey.push(count); // push the row's index
                 arrCompKey.push(index); // push the box's index
             }
-        })
+        });
         if (arrCompare.length === 1 && gameboard.every(onlyOpponent)) { // if the compare array has only one value AND only has opponent's symbol in the remaining boxes, use the box's row and index values as keys to mark play
             console.log(arrCompKey);
             key0 = arrCompKey[0][0];
@@ -183,9 +195,9 @@ function noOpponent() {
 function displayBoard() {
     gameView = '\nTIC TAC TOE\n\n';
     winKey = [];
-    let boxIndex = 0;
+    var boxIndex = 0;
     for(rowCount = 0; rowCount < boardRows; rowCount ++) {
-        let row = [],
+        var row = [],
             boxCount;
         for(boxCount = 0; boxCount < boardRows; boxCount ++) {
 
@@ -199,10 +211,10 @@ function displayBoard() {
 
             gameView += '\t';
             boxIndex ++; // track index number outside of this loop
-        };
+        }
         winKey.push(row);
         gameView += '\n\n';
-    };
+    }
     console.log( gameView) + '\n\n';
     console.log(winKey);
 }
@@ -259,10 +271,8 @@ function smartMove() {
         //     break;
         default:
             console.log('random move made');
-            length = openBoxes.length
-            console.log({length});
+            // length = openBoxes.length
             boxPlay = Math.ceil(Math.random() * openBoxes.length);
-            console.log({boxPlay});
     }
     isValid(); // TODO: can this be removed and changed to markBox(); in the future since the computer will no longer pick unavailable boxes with openBoxes array?
 }
@@ -290,7 +300,7 @@ function markBox() {
     symbol = currPlayer.symbol; // set the symbol to current player's symbol
     boxObj.symbol = symbol; // mark the gameboard array
 
-    let openIndex = openBoxes.indexOf(boxPlay); // find box number index in openBoxes array
+    var openIndex = openBoxes.indexOf(boxPlay); // find box number index in openBoxes array
     openBoxes.splice(openIndex, 1); // remove box number from openBoxes array
 
     if (boardRender) {
